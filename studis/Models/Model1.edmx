@@ -24,6 +24,12 @@
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams />
+    <Diagrams >
+      <Diagram DiagramId="d53c58c2407a4d38864e7449d7c7d391" Name="Diagram1">
+        <EntityTypeShape EntityType="studis.ip_zaklep" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="studis.uporabnik" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="studis.ip_zaklep_uporabnik_fk" ManuallyRouted="false" />
+      </Diagram>
+    </Diagrams>
   </Designer>
 </edmx:Edmx>

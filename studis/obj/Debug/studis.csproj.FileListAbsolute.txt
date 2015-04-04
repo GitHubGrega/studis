@@ -28,3 +28,4 @@ C:\git\studis\studis\bin\System.Web.Mvc.dll
 C:\git\studis\studis\bin\System.Web.Mvc.xml
 C:\git\studis\studis\bin\System.Web.Razor.dll
 C:\git\studis\studis\bin\System.Web.Razor.xml
+C:\Users\Grega\Workspace\Git\studis\studis\obj\Debug\studis.csprojResolveAssemblyReference.cache
