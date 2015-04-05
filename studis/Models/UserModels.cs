@@ -23,22 +23,22 @@ namespace studis.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm new password")]
-        [System.Web.Mvc.Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.CompareAttribute("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 
     public class LoginModel
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "Uporabniško ime")]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Geslo")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me")]
+        [Display(Name = "Zapomni si me")]
         public bool RememberMe { get; set; }
     }
 
@@ -61,7 +61,7 @@ namespace studis.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [System.Web.Mvc.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.CompareAttribute("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         [Required]
@@ -71,6 +71,22 @@ namespace studis.Models
         [Required]
         [Display(Name = "Password Answer")]
         public string PasswordAnswer { get; set; }
+
+    }
+
+    public class PasswordRecoveryModel
+    {
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Email naslov")]
+        public string Email { get; set; }
+    }
+
+    public class ResetPasswordModel
+    {
+
+        [Required]
+        public int token { get; set; }
 
     }
 }

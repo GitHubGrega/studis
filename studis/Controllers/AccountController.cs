@@ -6,11 +6,15 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using studis.Models;
+using WebMatrix.WebData;
 
 namespace studis.Controllers
 {
     public class AccountController : Controller
     {
+
+        public studisEntities db = new studisEntities();
+
 
         public ActionResult Login()
         {
@@ -21,25 +25,72 @@ namespace studis.Controllers
         public ActionResult Login(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
-            {
-                if (Membership.ValidateUser(model.UserName, model.Password))
+            {                
+                //poglej ce je IP zaklenjen
+                string ip = Request.UserHostAddress;
+                var ipl = IpLock.FindActiveByIp(ip);
+                if (ipl == null)
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-                    if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                        && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                    //ip zaklepa ni ali pa je potekel
+                    var user = studis.Models.User.FindByName(db, model.UserName);
+                    if (user != null)
                     {
-                        return Redirect(returnUrl);
+                        System.Diagnostics.Debug.WriteLine("notnull " + user.my_aspnet_membership.FailedPasswordAttemptCount);
+                        if (user.my_aspnet_membership.FailedPasswordAttemptCount >= 3)
+                        {
+                            System.Diagnostics.Debug.WriteLine("cntdecrease");
+                            user.my_aspnet_membership.FailedPasswordAttemptCount = 0;
+                        }
+
+                    }
+
+                    if (Membership.ValidateUser(model.UserName, model.Password))
+                    {
+                        //resetiraj failed ob uspesnem loginu
+                        user.my_aspnet_membership.FailedPasswordAttemptCount = 0;
+                        db.SaveChanges();
+
+                        FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+                        if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                            && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        if (user != null)
+                        {
+                            user.my_aspnet_membership.FailedPasswordAttemptCount++;
+                            if (user.my_aspnet_membership.FailedPasswordAttemptCount >= 3)
+                            {
+                                ip_lock ipln = new ip_lock();
+                                ipln.ip = Request.UserHostAddress;
+                                ipln.locked_at = DateTime.Now;
+                                ipln.locked_until = DateTime.Now.AddMinutes(3);
+                                ipln.userId = user.id;
+                                IpLock.Add(ipln);
+
+                                System.Diagnostics.Debug.WriteLine("iplock");
+                            }
+                            ModelState.AddModelError("", "Geslo ni pravilno. Poskus (" + user.my_aspnet_membership.FailedPasswordAttemptCount + "/3)");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Uporabniško ime ni pravilno.");
+                        }
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The user name or password is not correct.");
+                    ModelState.AddModelError("", "Vaš IP je zaklenjen. Poskusite po " + ipl.locked_until.ToString());
                 }
             }
+            db.SaveChanges();
 
             return View(model);
         }
@@ -51,37 +102,14 @@ namespace studis.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult CreateUser()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult CreateUser(CreateUserModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                MembershipCreateStatus createStatus;
-                Membership.CreateUser(model.UserName, model.Password, model.Email, model.PasswordQuestion, model.PasswordAnswer, true, null, out createStatus);
-
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    FormsAuthentication.SetAuthCookie(model.UserName, false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", ErrorCodeToString(createStatus));
-                }
-            }
-
-            return View(model);
-        }
-
 
         [Authorize]
         public ActionResult ChangePassword()
         {
+            return View();
+        }
+
+        public ActionResult PasswordRecovery() {
             return View();
         }
 
@@ -110,7 +138,7 @@ namespace studis.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The password is incorrect or new password is invalid.");
+                    ModelState.AddModelError("", "Trenutno ali novo geslo je nepravilno.");
                 }
             }
 
@@ -118,6 +146,99 @@ namespace studis.Controllers
         }
 
         public ActionResult ChangePasswordSuccess()
+        {
+            return View();
+        }
+
+        public ActionResult PasswordRecoverySuccess()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/ForgotPassword
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult PasswordRecovery(PasswordRecoveryModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = studis.Models.User.FindByEmail(db, model.Email);
+                if (user == null )
+                {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    return View("PasswordRecoverySuccess");
+                }
+
+                string code = studis.Models.User.GeneratePasswordResetToken(user.userId);
+                string baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+                string to = user.Email;
+                string text = "Ponastavite geslo z obiskom <a href='" + baseUrl + "Account/ResetPassword/" + code + "'>tega naslova</a>";
+                System.Diagnostics.Debug.WriteLine(text);
+                
+                studis.Models.User.SendEmail(text, to);
+
+                password_recovery pr = new password_recovery();
+                pr.token=code;
+                pr.userId=user.userId;
+                pr.valid_until=DateTime.Now.AddHours(1);
+
+                db.password_recovery.Add(pr);
+                db.SaveChanges();
+
+                return RedirectToAction("PasswordRecoverySuccess", "Account");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        public ActionResult ResetPassword(string id)
+        {
+            var L2EQuery = db.password_recovery.Where(t => t.token == id).Where(d => d.valid_until > DateTime.Now);
+            var pr = L2EQuery.FirstOrDefault<password_recovery>();
+            if (pr == null)
+            {
+                return RedirectToAction("PasswordRecoveryExpired", "Account");
+            }
+            else
+            {
+                ResetPasswordModel m = new ResetPasswordModel();
+                m.token = pr.id;
+                return View(m);
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                System.Diagnostics.Debug.WriteLine(model.token);
+                var pr = db.password_recovery.Find(model.token);
+                var user = pr.my_aspnet_users;
+
+                System.Diagnostics.Debug.WriteLine(user.id);
+                MembershipUser currentUser = Membership.GetUser(user.id);
+                string newpass = currentUser.ResetPassword();
+
+                db.password_recovery.Remove(pr);
+                db.SaveChanges();
+
+                TempData["pass"] = newpass;
+                System.Diagnostics.Debug.WriteLine(newpass);
+                return RedirectToAction("PasswordRecoveryComplete", "Account");
+            }
+            return View(model);
+        }
+
+        public ActionResult PasswordRecoveryExpired()
+        {
+            return View();
+        }
+
+        public ActionResult PasswordRecoveryComplete()
         {
             return View();
         }

@@ -48,11 +48,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -70,10 +72,18 @@
       <Private>True</Private>
       <HintPath>..\packages\MySql.Web.6.9.6\lib\net45\MySql.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData">
@@ -93,6 +103,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -140,57 +158,125 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+<<<<<<< HEAD
     <Compile Include="Controllers\Ip_zaklepController.cs" />
     <Compile Include="Controllers\UporabnikController.cs" />
     <Compile Include="Controllers\VpisniListController.cs" />
+=======
+    <Compile Include="Controllers\ImportController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
+>>>>>>> upstream/master
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ip_zaklep.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Models\IpLock.cs" />
+    <Compile Include="Models\ip_lock.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.Context.cs">
+    <Compile Include="Models\my_aspnet_applications.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_membership.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_paths.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_personalizationallusers.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_personalizationperuser.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_profiles.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_roles.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_sessioncleanup.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_sessions.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_sitemap.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_users.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\password_recovery.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\student.cs">
+      <DependentUpon>Studis.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Studis.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
+      <DependentUpon>Studis.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.cs">
+    <Compile Include="Models\Studis.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>Studis.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.Designer.cs">
+    <Compile Include="Models\Studis.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+<<<<<<< HEAD
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Sifrant.cs" />
     <Compile Include="Models\Sifranti.cs" />
     <Compile Include="Models\uporabnik.cs">
       <DependentUpon>Model1.tt</DependentUpon>
+=======
+      <DependentUpon>Studis.edmx</DependentUpon>
+>>>>>>> upstream/master
     </Compile>
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Models\VpisniList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\indeks.png" />
     <Content Include="Global.asax" />
-    <EntityDeploy Include="Models\Model1.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Model1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\Model1.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model1.cs</LastGenOutput>
-    </Content>
     <Content Include="packages.config" />
+    <EntityDeploy Include="Models\Studis.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Studis.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Studis.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Studis.edmx</DependentUpon>
+      <LastGenOutput>Studis.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Studis.edmx.diagram">
+      <DependentUpon>Studis.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\Studis.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Studis.edmx</DependentUpon>
+      <LastGenOutput>Studis.cs</LastGenOutput>
+    </Content>
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery-2.1.1-vsdoc.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\_studentSearch.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -206,17 +292,37 @@
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\CreateUser.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Ip_zaklep\Index.cshtml" />
     <Content Include="Views\Uporabnik\Index.cshtml" />
     <Content Include="Views\VpisniList\VpisniList.cshtml" />
+=======
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Student\Create.cshtml" />
+    <Content Include="Views\Student\Delete.cshtml" />
+    <Content Include="Views\Student\Details.cshtml" />
+    <Content Include="Views\Student\Edit.cshtml" />
+    <Content Include="Views\Student\Students.cshtml" />
+    <Content Include="Views\Shared\_StudentSearchPartial.cshtml" />
+    <Content Include="Views\Import\Import.cshtml" />
+    <Content Include="Views\Import\Print.cshtml" />
+    <Content Include="Views\Account\PasswordRecovery.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Account\PasswordRecoverySuccess.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\PasswordRecoveryExpired.cshtml" />
+    <Content Include="Views\Account\PasswordRecoveryComplete.cshtml" />
+>>>>>>> upstream/master
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
